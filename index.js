@@ -33,8 +33,6 @@ client.on(Events.MessageCreate, async (message) => {
     console.log(message.content)
     message.channel.sendTyping()
 
-    //console.log("cp1")
-
     let messages = Array.from(await message.channel.messages.fetch({
         limit: PAST_MESSAGES,
         before: message.id
@@ -42,21 +40,11 @@ client.on(Events.MessageCreate, async (message) => {
     messages = messages.map(m=>m[1])
     messages.unshift(message)
 
-    //console.log("cp2")
-
-    //let users = [...new Set([...messages.map(m=> m.member.displayName), client.user.username])]
-
     let users = [...new Set([...messages.filter(m => m.member && m.member.displayName).map(m => m.member.displayName), client.user.username])]
-    
-    //console.log("cp3")
 
     let lastUser = users.pop()
 
-    //console.log("cp4")
-
     let prompt = `The following is a conversation between ${users.join(", ")}, and ${lastUser}. \n\n`
-
-    //console.log("cp5")
 
     for (let i = messages.length - 1; i >= 0; i--) {
         const m = messages[i]
