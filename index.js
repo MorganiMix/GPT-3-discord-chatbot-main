@@ -24,6 +24,7 @@ client.login(process.env.BOT_TOKEN)
 
 const BOT_CHANNEL = "1011138864011808878"
 const PAST_MESSAGES = 5
+const BOT_ID = "1075691829858668557"
 
 client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot) return
@@ -59,12 +60,15 @@ client.on(Events.MessageCreate, async (message) => {
 
     for (let i = messages.length - 1; i >= 0; i--) {
         const m = messages[i]
-        prompt += `${m.member.displayName}: ${m.content}\n`
+        if (m.member && m.member.displayName) prompt += `${m.member.displayName}: ${m.content}\n`
     }
+
     prompt += `${client.user.username}:`
     console.log("prompt:", prompt)
 
-
+    let flag = message.content.includes(BOT_ID)
+    console.log("bot_id.flag",BOT_ID,flag)
+    if (!flag) return
 
     const response = await openai.createCompletion({
         prompt,
@@ -72,8 +76,6 @@ client.on(Events.MessageCreate, async (message) => {
         max_tokens: 1000,
         stop: ["\n"]
     })
-
-
 
     console.log("response", response.data.choices[0].text)
     await message.channel.send(response.data.choices[0].text)
