@@ -26,11 +26,13 @@ const BOT_CHANNEL = "1011138864011808878"
 const PAST_MESSAGES = 5
 
 client.on(Events.MessageCreate, async (message) => {
-//    if (message.author.bot) return
+    if (message.author.bot) return
 //    if (message.channel.id !== BOT_CHANNEL) return
 
     console.log(message.content)
     message.channel.sendTyping()
+
+    console.log("cp1")
 
     let messages = Array.from(await message.channel.messages.fetch({
         limit: PAST_MESSAGES,
@@ -39,11 +41,15 @@ client.on(Events.MessageCreate, async (message) => {
     messages = messages.map(m=>m[1])
     messages.unshift(message)
 
+    console.log("cp2")
+
     let users = [...new Set([...messages.map(m=> m.member.displayName), client.user.username])]
 
     let lastUser = users.pop()
 
     let prompt = `The following is a conversation between ${users.join(", ")}, and ${lastUser}. \n\n`
+
+    console.log("cp3")
 
     for (let i = messages.length - 1; i >= 0; i--) {
         const m = messages[i]
@@ -52,12 +58,16 @@ client.on(Events.MessageCreate, async (message) => {
     prompt += `${client.user.username}:`
     console.log("prompt:", prompt)
 
+    console.log("cp4")
+
     const response = await openai.createCompletion({
         prompt,
-        model: "text-davinci-003",
+        model: "gpt-3.5-turbo-instruct",
         max_tokens: 500,
         stop: ["\n"]
     })
+
+    console.log("cp5")
 
     console.log("response", response.data.choices[0].text)
     await message.channel.send(response.data.choices[0].text)
