@@ -67,7 +67,7 @@ client.on(Events.MessageCreate, async (message) => {
     const response = await openai.createCompletion({
         prompt,
         model: "gpt-3.5-turbo-instruct",
-        max_tokens: 5000,
+        max_tokens: 1000,
         stop: ["\n"]
     })
 
