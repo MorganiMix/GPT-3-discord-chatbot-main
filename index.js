@@ -45,11 +45,15 @@ client.on(Events.MessageCreate, async (message) => {
 
     let users = [...new Set([...messages.map(m=> m.member.displayName), client.user.username])]
 
+    console.log("cp3")
+
     let lastUser = users.pop()
+
+    console.log("cp4")
 
     let prompt = `The following is a conversation between ${users.join(", ")}, and ${lastUser}. \n\n`
 
-    console.log("cp3")
+    console.log("cp5")
 
     for (let i = messages.length - 1; i >= 0; i--) {
         const m = messages[i]
@@ -58,16 +62,16 @@ client.on(Events.MessageCreate, async (message) => {
     prompt += `${client.user.username}:`
     console.log("prompt:", prompt)
 
-    console.log("cp4")
+
 
     const response = await openai.createCompletion({
         prompt,
         model: "gpt-3.5-turbo-instruct",
-        max_tokens: 500,
+        max_tokens: 5000,
         stop: ["\n"]
     })
 
-    console.log("cp5")
+
 
     console.log("response", response.data.choices[0].text)
     await message.channel.send(response.data.choices[0].text)
