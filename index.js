@@ -22,19 +22,16 @@ client.once(Events.ClientReady, (clientUser) => {
 
 client.login(process.env.BOT_TOKEN)
 
-const BOT_CHANNEL = "1011138864011808878"
-const PAST_MESSAGES = 5
-const BOT_ID = "1075691829858668557"
-
 client.on(Events.MessageCreate, async (message) => {
     if (message.author.bot) return
-//    if (message.channel.id !== BOT_CHANNEL) return
 
     console.log(message.content)
     message.channel.sendTyping()
 
+    if (!process.env.BOT_CHANNEL_ANY && message.channel.id !== process.env.BOT_CHANNEL) return
+
     let messages = Array.from(await message.channel.messages.fetch({
-        limit: PAST_MESSAGES,
+        limit: process.env.PAST_MESSAGES,
         before: message.id
     }))
     messages = messages.map(m=>m[1])
@@ -54,14 +51,15 @@ client.on(Events.MessageCreate, async (message) => {
     prompt += `${client.user.username}:`
     console.log("prompt:", prompt)
 
+    const BOT_ID = process.env.BOT_ID
     let flag = message.content.includes(BOT_ID)
     console.log("bot_id.flag",BOT_ID,flag)
     if (!flag) return
 
     const response = await openai.createCompletion({
         prompt,
-        model: "gpt-3.5-turbo-instruct",
-        max_tokens: 1000,
+        model: process.env.OPENAI_MODEL,
+        max_tokens: Number(process.env.MAX_TOKENS),
         stop: ["\n"]
     })
 
