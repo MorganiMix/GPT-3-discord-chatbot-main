@@ -5,8 +5,7 @@ Follow the tutorial here: https://youtu.be/hkMWVrhGorI
 Make a new .env file using the template on .env.example
 
 Initialize:
-npm init -y
-npm i discord.js dotenv openai
+npm install
 
 Run:
 node index.js
