@@ -1,0 +1,9 @@
+version: "3.8"
+services: 
+  client:
+    build: ./
+    container_name: gpt_3.5_discord
+    volumes:
+      - ./:/app
+    stdin_open: true
+    tty: true
