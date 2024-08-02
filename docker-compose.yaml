@@ -3,6 +3,8 @@ services:
   client:
     build: ./
     container_name: gpt_3.5_discord
+    ports:
+      - '3050:3000'
     volumes:
       - ./:/app
       - /app/node_modules
